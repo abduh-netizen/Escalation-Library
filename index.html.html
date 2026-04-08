@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Escalation Case Study Library · First Page Digital</title>
 <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+  firebase.initializeApp({
+    apiKey: "AIzaSyDSSzn2MDa-DbP-fFUCuukcRsGBQm3iYo4",
+    authDomain: "escalation-library.firebaseapp.com",
+    projectId: "escalation-library",
+    storageBucket: "escalation-library.firebasestorage.app",
+    messagingSenderId: "32439193044",
+    appId: "1:32439193044:web:7ee546fc767e71bed05a41"
+  });
+  window._db = firebase.firestore();
+</script>
 <style>
 :root{
   --blue:#427FE0;
@@ -150,7 +164,7 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
 .tldr-header{background:linear-gradient(90deg,var(--blue-dark) 0%,var(--blue) 100%);padding:10px 18px;display:flex;align-items:center;gap:10px}
 .tldr-header-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.75)}
 .tldr-header-title{font-size:13px;font-weight:900;color:#fff}
-.tldr-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0;border-top:none}
+.tldr-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border-top:none}
 .tldr-card{padding:16px 18px;border-right:1px solid var(--border);cursor:pointer;transition:background 0.12s;position:relative}
 .tldr-card:last-child{border-right:none}
 .tldr-card:hover{background:var(--bg)}
@@ -542,7 +556,7 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 
-<script type="module">
+<script>
 // ── Case navigation ──
 function showCase(id, btn) {
   document.querySelectorAll('.cs').forEach(el => el.classList.remove('active'));
@@ -710,10 +724,8 @@ function nextCaseNum() {
 // ── Persistent storage: load saved cases on startup ──
 async function loadSavedCases() {
   try {
-    const { collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
-    const snap = await getDocs(query(collection(window._db, 'cases'), orderBy('casenum', 'asc')));
+    const snap = await window._db.collection('cases').orderBy('casenum', 'asc').get();
     if (snap.empty) return;
-
     snap.forEach(docSnap => {
       const d = docSnap.data();
       d._docId = docSnap.id;
@@ -722,7 +734,6 @@ async function loadSavedCases() {
       injectCase(d);
       savedCases.push(d);
     });
-
     const countEl = document.querySelector('.lib-count');
     countEl.textContent = `${1 + savedCases.length} cases documented · Last updated ${new Date().toLocaleDateString('en-SG',{month:'short',year:'numeric'})}`;
   } catch (e) {
@@ -733,8 +744,7 @@ async function loadSavedCases() {
 // ── Persist a single new case to Firestore ──
 async function persistCase(caseData) {
   try {
-    const { collection, addDoc } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
-    const docRef = await addDoc(collection(window._db, 'cases'), caseData);
+    const docRef = await window._db.collection('cases').add(caseData);
     return docRef.id;
   } catch (e) {
     console.error('Storage write failed:', e);
@@ -998,23 +1008,8 @@ function resetInput() {
   document.getElementById('preview-content').innerHTML = '';
 }
 
-// ── Init: Firebase + load cases on page load ──
+// ── Init: load cases on page load ──
 document.addEventListener('DOMContentLoaded', async () => {
-  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js');
-  const { getFirestore } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDSSzn2MDa-DbP-fFUCuukcRsGBQm3iYo4",
-    authDomain: "escalation-library.firebaseapp.com",
-    projectId: "escalation-library",
-    storageBucket: "escalation-library.firebasestorage.app",
-    messagingSenderId: "32439193044",
-    appId: "1:32439193044:web:7ee546fc767e71bed05a41"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  window._db = getFirestore(app);
-
   await loadSavedCases();
   buildTLDR();
 });
