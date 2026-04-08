@@ -164,8 +164,11 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
 .tldr-header{background:linear-gradient(90deg,var(--blue-dark) 0%,var(--blue) 100%);padding:10px 18px;display:flex;align-items:center;gap:10px}
 .tldr-header-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.75)}
 .tldr-header-title{font-size:13px;font-weight:900;color:#fff}
-.tldr-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border-top:none}
-.tldr-card{padding:16px 18px;border-right:1px solid var(--border);cursor:pointer;transition:background 0.12s;position:relative}
+.tldr-cards{display:flex;flex-direction:row;overflow-x:auto;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;gap:0;border-top:none}
+.tldr-cards::-webkit-scrollbar{height:4px}
+.tldr-cards::-webkit-scrollbar-track{background:var(--bg)}
+.tldr-cards::-webkit-scrollbar-thumb{background:var(--blue-light);border-radius:2px}
+.tldr-card{padding:16px 18px;border-right:1px solid var(--border);cursor:pointer;transition:background 0.12s;position:relative;flex:0 0 240px;min-width:240px}
 .tldr-card:last-child{border-right:none}
 .tldr-card:hover{background:var(--bg)}
 .tldr-card.active-card{background:#EBF1FC}
@@ -179,7 +182,24 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
 .tldr-row-label.lbl-solution{color:#2e7d32}
 .tldr-row-text{font-size:11px;color:var(--text-primary);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .tldr-empty{padding:20px 18px;font-size:13px;color:var(--grey-light);font-style:italic}
-@media(max-width:640px){.tldr-cards{grid-template-columns:1fr}.tldr-card{border-right:none;border-bottom:1px solid var(--border)}.tldr-card:last-child{border-bottom:none}}
+/* Edit modal */
+.edit-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.edit-modal{background:var(--white);border-radius:10px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,0.22)}
+.edit-modal-header{background:linear-gradient(90deg,var(--blue-dark),var(--blue));padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-radius:10px 10px 0 0}
+.edit-modal-title{font-size:14px;font-weight:900;color:#fff}
+.edit-modal-close{background:none;border:none;color:rgba(255,255,255,0.75);font-size:20px;cursor:pointer;line-height:1;padding:0}
+.edit-modal-body{padding:20px}
+.edit-field{margin-bottom:16px}
+.edit-field label{display:block;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:var(--blue-dark);margin-bottom:6px}
+.edit-field input,.edit-field textarea,.edit-field select{font-family:'Lato',sans-serif;font-size:13px;color:var(--text-primary);width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:5px;outline:none;transition:border-color 0.15s;resize:vertical}
+.edit-field input:focus,.edit-field textarea:focus{border-color:var(--blue)}
+.edit-field textarea{min-height:80px;line-height:1.6}
+.edit-modal-footer{display:flex;gap:10px;justify-content:flex-end;padding:14px 20px;border-top:1px solid var(--border)}
+.edit-save-btn{font-family:'Lato',sans-serif;font-size:13px;font-weight:700;padding:9px 22px;border-radius:4px;border:none;background:var(--blue);color:#fff;cursor:pointer}
+.edit-save-btn:hover{background:var(--blue-dark)}
+.edit-cancel-btn{font-family:'Lato',sans-serif;font-size:13px;font-weight:700;padding:9px 16px;border-radius:4px;border:2px solid var(--border);background:var(--white);color:var(--grey);cursor:pointer}
+
+@media(max-width:640px){.tldr-card{flex:0 0 200px;min-width:200px}}
 @media(max-width:640px){
   .cs-metrics{grid-template-columns:repeat(2,1fr)}
   .breaks-grid{grid-template-columns:1fr}
@@ -217,7 +237,7 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
 
   <div class="lib-index">
     <div class="lib-index-btn active" onclick="showCase('cs001',this)">#001 · Ascendas SCM</div>
-    <div class="lib-index-btn add" onclick="showCase('cs-template',this)">+ Add case</div>
+    <div class="lib-index-btn add" onclick="requireAuth(()=>showCase('cs-template',document.getElementById('add-case-btn')))" id="add-case-btn">+ Add case</div>
   </div>
 
   <!-- CASE 001 -->
@@ -279,8 +299,8 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
           <div class="tl-date">23 Sep</div>
           <div class="tl-spine"><div class="tl-dot dot-bad"></div><div class="tl-line"></div></div>
           <div class="tl-content">
-            <div class="tl-text">PPC credit card activated by Performance Media (Flo) <span class="tl-flag flag-p">process break</span></div>
-            <div class="tl-note">17 days before PPC kick-off. Sales pushed Performance Media to activate. AM Carmen had not yet been assigned and had no visibility. No written policy existed.</div>
+            <div class="tl-text">PPC credit card activated by Paid Media (Flo) <span class="tl-flag flag-p">process break</span></div>
+            <div class="tl-note">17 days before PPC kick-off. Sales pushed Paid Media to activate. AM Carmen had not yet been assigned and had no visibility. No written policy existed.</div>
           </div>
         </div>
         <div class="tl-row">
@@ -343,8 +363,8 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
         <div class="break-card">
           <div class="break-num">Break 01</div>
           <div class="break-title">PPC card activated before kick-off</div>
-          <div class="break-tags"><span class="btag btag-pm">Performance Media</span><span class="btag btag-sales">Sales</span><span class="btag btag-policy">No policy</span></div>
-          <div class="break-text">Sales pushed Performance Media to activate at SA signing. AM Carmen had not yet been assigned and had zero visibility. No written policy defined when activation was permitted. Finance discovered this during the cancellation review — months after the fact. Nobody owned the step because no policy made anyone own it.</div>
+          <div class="break-tags"><span class="btag btag-pm">Paid Media</span><span class="btag btag-sales">Sales</span><span class="btag btag-policy">No policy</span></div>
+          <div class="break-text">Sales pushed Paid Media to activate at SA signing. AM Carmen had not yet been assigned and had zero visibility. No written policy defined when activation was permitted. Finance discovered this during the cancellation review — months after the fact. Nobody owned the step because no policy made anyone own it.</div>
         </div>
         <div class="break-card">
           <div class="break-num">Break 02</div>
@@ -380,7 +400,7 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
             <div class="l-num">L2</div>
             <div>
               <div class="l-title">Credit card and vendor activation is your authorisation to give — in writing</div>
-              <div class="l-text">No card or vendor cost should be activated before you, the AM, send written confirmation that the campaign is live. Sales does not own this step. Performance Media cannot act without your instruction. This protects both the client relationship and FPD's recoverable position if a cancellation occurs.</div>
+              <div class="l-text">No card or vendor cost should be activated before you, the AM, send written confirmation that the campaign is live. Sales does not own this step. Paid Media cannot act without your instruction. This protects both the client relationship and FPD's recoverable position if a cancellation occurs.</div>
             </div>
           </div>
           <div class="learning">
@@ -407,7 +427,7 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
             <div class="l-num">L1</div>
             <div>
               <div class="l-title">Closing the deal does not authorise vendor or card activation</div>
-              <div class="l-text">SA signing is not a green light for any operational cost to be incurred. Sales does not have the authority to instruct Performance Media to activate credit cards or vendor accounts. That instruction belongs to the AM, after campaign go-live is confirmed. Pushing teams to act early creates unrecoverable exposure if the campaign is cancelled shortly after.</div>
+              <div class="l-text">SA signing is not a green light for any operational cost to be incurred. Sales does not have the authority to instruct Paid Media to activate credit cards or vendor accounts. That instruction belongs to the AM, after campaign go-live is confirmed. Pushing teams to act early creates unrecoverable exposure if the campaign is cancelled shortly after.</div>
             </div>
           </div>
           <div class="learning">
@@ -421,20 +441,20 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
       </div>
 
       <div class="dept-block">
-        <div class="dept-label"><span class="dept-pill pill-pm">Performance Media</span></div>
+        <div class="dept-label"><span class="dept-pill pill-pm">Paid Media</span></div>
         <div class="learnings">
           <div class="learning">
             <div class="l-num">L1</div>
             <div>
               <div class="l-title">No written instruction from AM = no activation</div>
-              <div class="l-text">Performance Media must not activate credit cards, vendor accounts, or any cost-incurring resource based on verbal direction from Sales or assumption that approval exists. The rule is simple: written instruction from the assigned AM, on or after confirmed campaign go-live date, is the only valid trigger. If that instruction hasn't arrived, hold and escalate.</div>
+              <div class="l-text">Paid Media must not activate credit cards, vendor accounts, or any cost-incurring resource based on verbal direction from Sales or assumption that approval exists. The rule is simple: written instruction from the assigned AM, on or after confirmed campaign go-live date, is the only valid trigger. If that instruction hasn't arrived, hold and escalate.</div>
             </div>
           </div>
           <div class="learning">
             <div class="l-num">L2</div>
             <div>
               <div class="l-title">Stop work instructions must come in writing — and be actioned immediately</div>
-              <div class="l-text">When a client goes MIA and the AM signals concern, Performance Media needs a formal written stop instruction before halting delivery. Without it, work continues and costs accumulate. Flag to the AM if no stop instruction has been received within a reasonable period of the client going quiet — don't wait to be told.</div>
+              <div class="l-text">When a client goes MIA and the AM signals concern, Paid Media needs a formal written stop instruction before halting delivery. Without it, work continues and costs accumulate. Flag to the AM if no stop instruction has been received within a reasonable period of the client going quiet — don't wait to be told.</div>
             </div>
           </div>
         </div>
@@ -490,8 +510,8 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
         <div class="sop-label">Trigger: new paid media campaign signed</div>
         <div class="sop-step"><div class="sop-n">1</div><div class="sop-t">SA signed — Sales notifies AM of campaign assignment with full account state brief</div><div class="sop-o">Sales → AM</div></div>
         <div class="sop-step"><div class="sop-n">2</div><div class="sop-t">AM conducts kick-off call and confirms campaign go-live date</div><div class="sop-o">AM</div></div>
-        <div class="sop-step"><div class="sop-n">3</div><div class="sop-t">AM sends written instruction to Performance Media to activate credit card — on confirmed live date only</div><div class="sop-o">AM → Perf. Media</div></div>
-        <div class="sop-step"><div class="sop-n">4</div><div class="sop-t">Performance Media activates card upon receipt of written instruction. No instruction = no activation.</div><div class="sop-o">Perf. Media</div></div>
+        <div class="sop-step"><div class="sop-n">3</div><div class="sop-t">AM sends written instruction to Paid Media to activate credit card — on confirmed live date only</div><div class="sop-o">AM → Perf. Media</div></div>
+        <div class="sop-step"><div class="sop-n">4</div><div class="sop-t">Paid Media activates card upon receipt of written instruction. No instruction = no activation.</div><div class="sop-o">Perf. Media</div></div>
         <div class="sop-step"><div class="sop-n">5</div><div class="sop-t">AM logs campaign live date in CRM and notifies Finance</div><div class="sop-o">AM → Finance</div></div>
       </div>
     </div>
@@ -557,6 +577,21 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text-primary
 </style>
 
 <script>
+// ── Password gate ──
+const GATE_PW = 'whenclientsburn';
+let _gateUnlocked = false;
+
+function requireAuth(fn) {
+  if (_gateUnlocked) { fn(); return; }
+  const pw = prompt('Enter password to continue:');
+  if (pw === GATE_PW) {
+    _gateUnlocked = true;
+    fn();
+  } else if (pw !== null) {
+    alert('Incorrect password.');
+  }
+}
+
 // ── Case navigation ──
 function showCase(id, btn) {
   document.querySelectorAll('.cs').forEach(el => el.classList.remove('active'));
@@ -647,7 +682,13 @@ function buildTLDR() {
 function updateTLDRActiveCard(activeId) {
   document.querySelectorAll('.tldr-card').forEach(el => el.classList.remove('active-card'));
   const card = document.getElementById('tldr-' + activeId);
-  if (card) card.classList.add('active-card');
+  if (!card) return;
+  card.classList.add('active-card');
+  // Scroll the card to the left edge of the strip
+  const container = card.closest('.tldr-cards');
+  if (container) {
+    container.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
+  }
 }
 
 function jumpToCase(id) {
@@ -762,6 +803,16 @@ function injectCase(d) {
   csDiv.className = 'cs';
   csDiv.id = id;
   csDiv.innerHTML = buildCaseHTMLFromData(d);
+
+  // Append edit button at top if docId is available
+  if (d._docId) {
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Edit case';
+    editBtn.style.cssText = 'font-family:\'Lato\',sans-serif;font-size:11px;font-weight:700;padding:6px 14px;border-radius:4px;border:2px solid var(--blue);background:var(--white);color:var(--blue);cursor:pointer;margin-bottom:16px';
+    editBtn.onclick = function() { openEditModal(d._docId); };
+    csDiv.insertBefore(editBtn, csDiv.firstChild);
+  }
+
   document.getElementById('cs-template').before(csDiv);
 
   const addBtn = document.querySelector('.lib-index-btn.add');
@@ -839,7 +890,7 @@ The JSON must follow this exact schema:
     { "date": "string", "dot": "ok|warn|bad|grey", "text": "string — event description", "note": "string — optional sub-note, else empty string" }
   ],
   "breaks": [
-    { "num": "string e.g. 01", "title": "string", "tags": ["AM","Sales","Performance Media","Tech","Finance","No policy"], "text": "string" }
+    { "num": "string e.g. 01", "title": "string", "tags": ["AM","Sales","Paid Media","Tech","Finance","No policy"], "text": "string" }
   ],
   "learnings": [
     { "dept": "AM|Sales|PM|Tech|Finance", "num": "L1", "title": "string", "text": "string" }
@@ -855,7 +906,7 @@ The JSON must follow this exact schema:
 }
 
 Dot colour rules: ok=green for normal/correct events, warn=orange for concerning events like unpaid invoices, bad=red for process breaks or client MIA, grey=neutral.
-Departments: AM=Account Management, Sales=Sales, PM=Performance Media, Tech=Tech/Delivery, Finance=Finance.
+Departments: AM=Account Management, Sales=Sales, PM=Paid Media, Tech=Tech/Delivery, Finance=Finance.
 Extract as much detail as possible from the context. If information is not present, use sensible defaults or empty strings.
 Return ONLY the JSON object.`;
 
@@ -897,8 +948,8 @@ Return ONLY the JSON object.`;
 // ── Build case HTML from structured data ──
 function buildCaseHTMLFromData(d) {
   const deptPillMap = { AM:'pill-am', Sales:'pill-sales', PM:'pill-pm', Tech:'pill-tech', Finance:'pill-fin' };
-  const deptLabelMap = { AM:'Account Management', Sales:'Sales', PM:'Performance Media', Tech:'Tech / Delivery', Finance:'Finance' };
-  const tagMap = { AM:'btag-am', Sales:'btag-sales', 'Performance Media':'btag-pm', Tech:'btag-fin', Finance:'btag-fin', 'No policy':'btag-policy' };
+  const deptLabelMap = { AM:'Account Management', Sales:'Sales', PM:'Paid Media', Tech:'Tech / Delivery', Finance:'Finance' };
+  const tagMap = { AM:'btag-am', Sales:'btag-sales', 'Paid Media':'btag-pm', Tech:'btag-fin', Finance:'btag-fin', 'No policy':'btag-policy' };
 
   const statusBadge = d.status === 'closed'
     ? '<span class="cs-badge badge-status-closed">Closed</span>'
@@ -1008,12 +1059,120 @@ function resetInput() {
   document.getElementById('preview-content').innerHTML = '';
 }
 
+// ── Edit case ──
+let editingDocId = null;
+let editingCaseIndex = null; // index in savedCases array
+
+function openEditModal(docId) {
+  requireAuth(() => _openEditModal(docId));
+}
+
+function _openEditModal(docId) {
+  const d = savedCases.find(c => c._docId === docId);
+  if (!d) return;
+  editingDocId = docId;
+  editingCaseIndex = savedCases.indexOf(d);
+
+  document.getElementById('ef-client').value = d.client || '';
+  document.getElementById('ef-campaign').value = d.campaign || '';
+  document.getElementById('ef-period').value = d.period || '';
+  document.getElementById('ef-status').value = d.status || 'open';
+  document.getElementById('ef-background').value = d.background || '';
+  document.getElementById('ef-resolution').value = d.resolution || '';
+  document.getElementById('ef-problem').value = d.mainProblem || '';
+  document.getElementById('ef-learning').value = d.mainLearning || '';
+  document.getElementById('ef-solution').value = d.mainSolution || '';
+
+  document.getElementById('edit-modal-overlay').style.display = 'flex';
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal-overlay').style.display = 'none';
+  editingDocId = null;
+  editingCaseIndex = null;
+}
+
+async function saveEdit() {
+  if (editingDocId === null) return;
+
+  const d = savedCases[editingCaseIndex];
+  d.client = document.getElementById('ef-client').value.trim();
+  d.campaign = document.getElementById('ef-campaign').value.trim();
+  d.period = document.getElementById('ef-period').value.trim();
+  d.status = document.getElementById('ef-status').value;
+  d.background = document.getElementById('ef-background').value.trim();
+  d.resolution = document.getElementById('ef-resolution').value.trim();
+  d.mainProblem = document.getElementById('ef-problem').value.trim();
+  d.mainLearning = document.getElementById('ef-learning').value.trim();
+  d.mainSolution = document.getElementById('ef-solution').value.trim();
+
+  // Update in Firestore
+  try {
+    await window._db.collection('cases').doc(editingDocId).set(d);
+  } catch (e) {
+    alert('Failed to save changes: ' + e.message);
+    return;
+  }
+
+  // Rebuild DOM for this case
+  const caseIndex = editingCaseIndex + 2; // offset: #001 is hardcoded
+  const csId = `cs-saved-${caseIndex}`;
+  const csDiv = document.getElementById(csId);
+  if (csDiv) {
+    csDiv.innerHTML = buildCaseHTMLFromData(d);
+    // Re-add edit button
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Edit case';
+    editBtn.style.cssText = 'font-family:\'Lato\',sans-serif;font-size:11px;font-weight:700;padding:6px 14px;border-radius:4px;border:2px solid var(--blue);background:var(--white);color:var(--blue);cursor:pointer;margin-bottom:16px';
+    const docId = d._docId;
+    editBtn.onclick = function() { openEditModal(docId); };
+    csDiv.insertBefore(editBtn, csDiv.firstChild);
+  }
+
+  // Update nav tab label
+  const navBtns = [...document.querySelectorAll('.lib-index-btn')];
+  const navBtn = navBtns.find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(csId));
+  if (navBtn) navBtn.textContent = `#${d.casenum} · ${(d.client || 'Case').split(' ').slice(0,2).join(' ')}`;
+
+  buildTLDR();
+  closeEditModal();
+}
+
 // ── Init: load cases on page load ──
 document.addEventListener('DOMContentLoaded', async () => {
   await loadSavedCases();
   buildTLDR();
 });
 </script>
+<!-- Edit modal -->
+<div id="edit-modal-overlay" class="edit-modal-overlay" style="display:none" onclick="if(event.target===this)closeEditModal()">
+  <div class="edit-modal">
+    <div class="edit-modal-header">
+      <span class="edit-modal-title">Edit Case</span>
+      <button class="edit-modal-close" onclick="closeEditModal()">×</button>
+    </div>
+    <div class="edit-modal-body">
+      <div class="edit-field"><label>Client</label><input id="ef-client" type="text"></div>
+      <div class="edit-field"><label>Campaign / Services</label><input id="ef-campaign" type="text"></div>
+      <div class="edit-field"><label>Period</label><input id="ef-period" type="text" placeholder="e.g. Jan – Mar 2026"></div>
+      <div class="edit-field"><label>Status</label>
+        <select id="ef-status">
+          <option value="closed">Closed</option>
+          <option value="open">Open</option>
+        </select>
+      </div>
+      <div class="edit-field"><label>Background</label><textarea id="ef-background"></textarea></div>
+      <div class="edit-field"><label>Resolution</label><textarea id="ef-resolution"></textarea></div>
+      <div class="edit-field"><label>TLDR — Main Problem</label><textarea id="ef-problem" style="min-height:56px"></textarea></div>
+      <div class="edit-field"><label>TLDR — Main Learning</label><textarea id="ef-learning" style="min-height:56px"></textarea></div>
+      <div class="edit-field"><label>TLDR — Main Solution</label><textarea id="ef-solution" style="min-height:56px"></textarea></div>
+    </div>
+    <div class="edit-modal-footer">
+      <button class="edit-cancel-btn" onclick="closeEditModal()">Cancel</button>
+      <button class="edit-save-btn" onclick="saveEdit()">Save changes</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
