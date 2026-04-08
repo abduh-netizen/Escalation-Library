@@ -859,7 +859,7 @@ Departments: AM=Account Management, Sales=Sales, PM=Performance Media, Tech=Tech
 Extract as much detail as possible from the context. If information is not present, use sensible defaults or empty strings.
 Return ONLY the JSON object.`;
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('/api/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
